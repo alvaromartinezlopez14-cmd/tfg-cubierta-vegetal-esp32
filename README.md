@@ -186,7 +186,7 @@ El dispositivo envía a Thinger.io los principales resultados y variables de est
 - Estado de Deep Sleep.
 - Contadores de capturas y despertares.
 
-Las mediciones pueden almacenarse en un data bucket y visualizarse mediante indicadores y gráficas en un dashboard.
+Las mediciones pueden almacenarse en un data bucket y visualizarse mediante indicadores y gráficas en un dashboard. Además, desde este panel pueden modificarse de forma remota algunos parámetros de funcionamiento y enviarse órdenes básicas al dispositivo.
 
 ### Funcionamiento automático
 
