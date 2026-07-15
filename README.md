@@ -46,6 +46,7 @@ El proyecto utiliza las siguientes librerías:
 - `esp_camera.h`
 - `img_converters.h`
 - `WiFi.h`
+- `WiFiProv.h`
 - `WebServer.h`
 - `ThingerESP32.h`
 - `ThingerConsole.h`
@@ -53,7 +54,7 @@ El proyecto utiliza las siguientes librerías:
 - `esp_timer.h`
 - `Preferences.h`
 
-Las librerías relacionadas con la cámara, la conectividad Wi-Fi y el modo Deep Sleep forman parte del entorno ESP32. Las librerías de Thinger.io deben instalarse desde el gestor de bibliotecas de Arduino IDE.
+Las librerías relacionadas con la cámara, la conectividad Wi-Fi, el aprovisionamiento Bluetooth y el modo Deep Sleep forman parte del entorno ESP32. Las librerías de Thinger.io deben instalarse desde el gestor de bibliotecas de Arduino IDE.
 
 ## Estructura general del código
 
@@ -62,7 +63,7 @@ El programa se organiza en los siguientes bloques funcionales:
 1. Definición de constantes y parámetros de configuración.
 2. Configuración del sensor de imagen OV3660.
 3. Gestión de la memoria PSRAM.
-4. Configuración y conexión a la red Wi-Fi.
+4. Configuración y conexión a la red Wi-Fi mediante aprovisionamiento Bluetooth y almacenamiento en memoria NVS.
 5. Conexión con la plataforma Thinger.io.
 6. Captura de imágenes en formato JPEG.
 7. Conversión de las imágenes a RGB888.
@@ -80,14 +81,7 @@ El programa se organiza en los siguientes bloques funcionales:
 
 ## Configuración inicial
 
-Antes de compilar el programa deben sustituirse las etiquetas genéricas incluidas en el código por los datos correspondientes a cada usuario.
-
-### Credenciales de la red Wi-Fi
-
-Deben configurarse:
-
-- Nombre de la red Wi-Fi.
-- Contraseña de la red Wi-Fi.
+Antes de compilar el programa deben sustituirse las etiquetas genéricas correspondientes a la plataforma Thinger.io por los datos de cada usuario.
 
 ### Credenciales de Thinger.io
 
@@ -99,6 +93,16 @@ Deben configurarse:
 
 Por motivos de seguridad, las credenciales reales utilizadas durante el desarrollo no se incluyen en este repositorio.
 
+### Configuración de la red Wi-Fi
+
+Las credenciales de la red Wi-Fi no se introducen directamente en el código.
+
+En el primer arranque, el dispositivo inicia un proceso de aprovisionamiento mediante Bluetooth Low Energy. El nombre y la contraseña de la red se introducen desde la aplicación **ESP BLE Provisioning**, desarrollada por Espressif.
+
+Una vez comprobada la conexión, las credenciales se almacenan en la memoria NVS del ESP32 y se reutilizan en los siguientes arranques.
+
+El dispositivo aparece en la aplicación con el nombre `PROV_TimerCamF` y utiliza el PIN o Proof of Possession `CAMBIAR1`. Se recomienda sustituir este valor genérico por uno propio antes de utilizar el sistema.
+
 ## Carga del programa en la placa
 
 Para cargar el programa en la M5Stack TimerCamera-F deben seguirse estos pasos:
@@ -107,13 +111,19 @@ Para cargar el programa en la M5Stack TimerCamera-F deben seguirse estos pasos:
 2. Instalar el soporte para placas ESP32.
 3. Instalar las librerías necesarias para Thinger.io.
 4. Abrir el archivo `codigo_base_funcional_v9.ino`.
-5. Introducir las credenciales propias de Wi-Fi y Thinger.io.
+5. Introducir las credenciales propias de Thinger.io.
 6. Conectar la M5Stack TimerCamera-F al ordenador mediante USB.
 7. Seleccionar en Arduino IDE la placa `M5TimerCAM / M5Stack-Timer-CAM`.
 8. Seleccionar el puerto correspondiente.
 9. Compilar el programa.
 10. Cargar el programa en el dispositivo.
-11. Abrir el monitor serie para comprobar la inicialización y la conexión Wi-Fi.
+11. Abrir el monitor serie para comprobar la inicialización.
+12. Abrir la aplicación **ESP BLE Provisioning** en un teléfono móvil.
+13. Seleccionar el dispositivo `PROV_TimerCamF`.
+14. Introducir el PIN o Proof of Possession configurado en el código.
+15. Seleccionar una red Wi-Fi de 2,4 GHz e introducir su contraseña.
+16. Esperar a que el dispositivo guarde las credenciales y se reinicie.
+17. Consultar en el monitor serie la dirección IP asignada para acceder a la interfaz web local.
 
 ## Funcionamiento general
 
@@ -201,9 +211,11 @@ Los parámetros principales y los contadores se conservan entre ciclos mediante 
 
 ## Seguridad
 
-El código publicado utiliza etiquetas genéricas en lugar de contraseñas, nombres de usuario, identificadores o credenciales reales.
+El código publicado utiliza etiquetas genéricas en lugar del nombre de usuario, el identificador y la credencial reales de Thinger.io.
 
-Cada usuario debe introducir sus propios datos antes de compilar y cargar el programa.
+Las credenciales de la red Wi-Fi tampoco se incluyen directamente en el código. Se introducen mediante la aplicación ESP BLE Provisioning y se almacenan en la memoria NVS del ESP32.
+
+Cada usuario debe introducir sus propias credenciales de Thinger.io, configurar su red Wi-Fi mediante el proceso de aprovisionamiento y sustituir el PIN genérico por uno adecuado.
 
 ## Autor
 
