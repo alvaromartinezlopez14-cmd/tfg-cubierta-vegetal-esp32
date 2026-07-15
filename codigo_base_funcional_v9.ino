@@ -186,7 +186,6 @@ unsigned long algorithmPreviewDirtySinceMs = 0;
 
 // Version de imagen publicada (cambia solo al terminar correctamente).
 uint32_t algorithmPreviewVersion = 0;
-// Version solicitada y version efectivamente procesada.
 uint32_t algorithmPreviewRequestedVersion = 0;
 uint32_t algorithmPreviewProcessedVersion = 0;
 
